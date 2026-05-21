@@ -32,7 +32,7 @@ CREATE TABLE ingredients (
 CREATE TABLE mealplanner (
     id SERIAL PRIMARY KEY,
     -- user_id INTEGER NOT NULL,
-    date DATE,
+    date DATE
     -- FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
