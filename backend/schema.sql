@@ -124,8 +124,15 @@ INSERT INTO mealplanner_recipes (mealplanner_id, recipe_id, meal_type) VALUES
 (1, 1, 'Dinner'), -- Tomato Pasta for Dinner
 
 -- Tuesday (mealplanner_id = 2)
-(2, 1, 'Lunch'),  -- Tomato Pasta for Lunch (Leftovers!)
+(2, 1, 'Lunch'),  -- Tomato Pasta for Lunch
 (2, 2, 'Dinner'), -- Quesadillas for Dinner
 
 -- Wednesday (mealplanner_id = 3)
 (3, 3, 'Dinner'); -- Baked Salmon for Dinner
+
+SELECT * FROM recipes
+-- on recipes.id is the recipe we're looking at. = recipes_ing. recipe_id, here we look for the rows where recipe_id match recipes.id. the . between the table names means put these rows together.
+-- this gives us access to the amount and unit, but still not the ingredient.
+JOIN recipes_ingredients ON recipes.id = recipes_ingredients.recipe_id
+-- grab ingredient_id and in the ingredient-table find the matching ingredients.id
+JOIN ingredients ON recipes_ingredients.ingredient_id = ingredients.id;
