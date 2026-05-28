@@ -24,7 +24,7 @@ CREATE TABLE recipes (
 
 CREATE TABLE ingredients (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     category TEXT,
     allergen TEXT
 );
