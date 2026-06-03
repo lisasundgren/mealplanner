@@ -26,7 +26,8 @@ app.get('/recipes', async (req, res) => {
     JSON_BUILD_OBJECT(
     'name', ingredients.name,
     'amount', recipes_ingredients.amount,
-    'unit', recipes_ingredients.unit
+    'unit', recipes_ingredients.unit,
+    'allergen', ingredients.allergen
     )
     ) AS ingredients
      FROM recipes
@@ -42,6 +43,16 @@ app.get('/recipes', async (req, res) => {
   } catch (error) {
     console.error('Error during collection of recipe:', error);
     res.status(500).json({ error: 'Could not collect data from the database' });
+  }
+});
+
+app.get('/ingredients', async (request, res) => {
+  try {
+    const result = await database.query('SELECT * FROM ingredients ORDER BY name ASC');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error when collecting the ingredients:', error);
+    res.status(500).json({ error: 'Could not collect ingredients from database.' });
   }
 });
 
@@ -105,23 +116,32 @@ app.post('/recipes', async (req, res) => {
     // No errors, save to the database
     await database.query('COMMIT');
     res.status(201).json({ message: 'Recipe created succesfully!', recipeId: newRecipeId });
-    // } catch (error: unknown) {
-    //   await database.query('ROLLBACK');
-    //   console.error('Error during creation of recipe:', error);
-    //   res.status(500).json({ error: 'Could not create recipe' });
-
-    // }
   } catch (error) {
     await database.query('ROLLBACK');
     console.error('Error during creation of recipe:', error);
 
-    // Vi kollar om error är ett riktigt Error-objekt, då har det ett .message
+    // We check if error is a real Error-object, then it contains a .message.
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
     res.status(500).json({
       error: 'Could not create recipe',
       details: errorMessage,
     });
+  }
+});
+
+app.get('/allergens', async (req, res) => {
+  try {
+    const result = await database.query(
+      // DISTINCT checks through the entire column and only returns each allergen once
+      'SELECT DISTINCT allergen FROM ingredients WHERE allergen IS NOT NULL ORDER BY allergen ASC',
+    );
+
+    const allergens = result.rows.map((row) => row.allergen);
+    res.json(allergens);
+  } catch (error) {
+    console.error('Error fetching allergens:', error);
+    res.status(500).json({ error: 'Could not fetch allergens' });
   }
 });
 
