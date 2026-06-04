@@ -1,5 +1,5 @@
 import { createHashRouter, RouterProvider, Outlet } from 'react-router-dom';
-// import Header from './components/Header';
+import Header from './components/Header';
 import Home from './pages/Home';
 // import GroceryList from './pages/GroceryList';
 // import RecipeDetails from './pages/RecipeDetails';
@@ -8,7 +8,7 @@ import { RecipeProvider } from './context/RecipeProvider';
 const RootLayout = () => {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <main>
         <Outlet />
       </main>
