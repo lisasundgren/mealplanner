@@ -16,6 +16,9 @@
     "jsx": "react-jsx",
 
     /* Linting */
+    "strict": true, // <-- Tvingar fram stenhård typning och löser catch(e)-problemet
+    "noUncheckedIndexedAccess": true, // <-- Kräver kontroll av array-index (t.ex. list[0])
+    "noImplicitReturns": true, // <-- Alla vägar i en funktion måste returnera ett värde
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,

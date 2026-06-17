@@ -12,7 +12,7 @@ export interface Recipe {
   description: string | null;
   instructions: string;
   cooking_time: number | null;
-  portions: number | null;
+  portions: number;
   ingredients: Ingredient[]; // the JSON AGG-list is in here
 }
 
@@ -43,6 +43,7 @@ export interface AllergenFilterProps {
 
 export interface SavedRecipe {
   recipeId: number;
+  name: string;
   portions: number;
 }
 
@@ -50,4 +51,37 @@ export interface RecipeContextType {
   recipes: Recipe[];
   allergens: string[];
   loading: boolean;
+  groceryList: SavedRecipe[];
+  addToGroceryList: (recipe: Recipe) => void;
+  increasePortions: (recipeId: number) => void;
+  decreasePortions: (recipeId: number) => void;
+  removeFromGroceryList: (recipeId: number) => void;
+  updateRecipe: (updatedRecipe: Recipe) => void;
+  deleteRecipe: (id: number) => Promise<void>;
+  addRecipe: (newRecipe: Omit<Recipe, 'id'>) => Promise<void>;
+}
+
+export interface SelectedRecipesListProps {
+  groceryList: SavedRecipe[];
+  increasePortions: (id: number) => void;
+  decreasePortions: (id: number) => void;
+  removeFromGroceryList: (id: number) => void;
+}
+
+export interface IngredientsListProps {
+  groceryList: SavedRecipe[];
+  recipes: Recipe[];
+}
+
+// an internal interface for the ingredients on the GroceryList screen
+export interface CombinedIngredient {
+  name: string;
+  amount: number;
+  unit: string;
+}
+
+export interface EditRecipeFormProps {
+  recipe: Recipe;
+  onCancel: () => void;
+  onSave: (updatedRecipe: Recipe) => void;
 }

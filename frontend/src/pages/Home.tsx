@@ -1,30 +1,50 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, type ReactElement } from 'react';
 import { RecipeContext } from '../context/RecipeContext';
 import SearchBar from '../components/SearchBar';
 import AllergenFilter from '../components/AllergenFilter';
 import RecipeList from '../components/RecipeList';
+import EditRecipeForm from '../components/EditRecipeForm';
+import { type Recipe } from '../types/Types';
 
-const Home = () => {
+const Home = (): ReactElement => {
   const context = useContext(RecipeContext);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
 
-  if (!context) return <p>Context error...</p>;
+  if (!context)
+    return (
+      <div className="container mt-4">
+        {/* role is for screen readers to ensure this error message is accessible */}
+        <p className="alert alert-danger" role="alert">
+          Context error...
+        </p>
+      </div>
+    );
 
-  const { recipes, allergens, loading } = context;
+  const { recipes, allergens, loading, addRecipe } = context;
+
+  const emptyRecipe: Recipe = {
+    id: 0, //signals to the component that this is a new recipe
+    name: '',
+    description: '',
+    instructions: '',
+    cooking_time: 0,
+    portions: 4, // default portions
+    ingredients: [], // begin with an empty array
+  };
 
   //   Prev stands for previous state and includes the list of how the checked allergens "looked" before we clicked.
   // prev.includes(allergen) checks if the allergen we just clicked already exist in the checked filters.
   // if yes, we uncheck the box. "if yes, create a new array with all the allergens but allergen a that I unchecked"
   // if no, copy everything ... in prev and add the new allergen at the end
-  const handleAllergenChange = (allergen: string) => {
+  const handleAllergenChange = (allergen: string): void => {
     setSelectedAllergens((prev) =>
       prev.includes(allergen) ? prev.filter((a) => a !== allergen) : [...prev, allergen],
     );
   };
 
-  //   A failsafe if anything would be undefined, an empty array is used instead.
-  const filteredRecipes = (recipes || []).filter((recipe) => {
+  const filteredRecipes = recipes.filter((recipe) => {
     const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase());
 
     if (selectedAllergens.length === 0) {
@@ -43,18 +63,56 @@ const Home = () => {
     return matchesSearch && !hasBlockedAllergen;
   });
 
-  if (loading) return <p>Loading...</p>; //visible while loading, switches to the recipes asap when it's done
+  if (loading)
+    return (
+      <div className="container mt-4 placeholder-glow">
+        <p className="placeholder bg-secondary opacity-15 rounded">Loading...</p>
+        {/* visible while loading, switches to the recipes asap when it's done */}
+      </div>
+    );
+
+  if (isAdding) {
+    return (
+      <div className="container mt-4">
+        <EditRecipeForm
+          recipe={emptyRecipe}
+          onCancel={() => {
+            setIsAdding(false);
+          }}
+          // by wrapping the function in an inline-arrow-function and using void we avoid sending the functions promise to EditRecipeForm, same as we did in RecipeList.tsx
+          // updatedRecipe is in the provider
+          onSave={(updatedRecipe) => {
+            void addRecipe(updatedRecipe);
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>Recipe bank</h1>
-      <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      <AllergenFilter
-        allergensList={allergens}
-        selectedAllergens={selectedAllergens}
-        onAllergenChange={handleAllergenChange}
-      />
-      <hr /> {/* gives a visual break */}
+    <div className="container my-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="fw-bold text-dark m-0">Recipe bank</h1>
+        <button
+          className="btn btn-success d-flex align-items-center gap-2"
+          onClick={() => {
+            setIsAdding(true);
+          }}
+        >
+          <i className="bi bi-plus-lg"></i> Add new recipe
+        </button>
+      </div>
+      <div className="bg-light p-3 rounded shadow-sm mb-4">
+        <div className="row g-3">
+          <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+          <AllergenFilter
+            allergensList={allergens}
+            selectedAllergens={selectedAllergens}
+            onAllergenChange={handleAllergenChange}
+          />
+        </div>
+      </div>
+      <hr className="my-4 text-muted" /> {/* gives a visual break */}
       <RecipeList recipes={filteredRecipes} />
     </div>
   );

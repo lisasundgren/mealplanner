@@ -12,7 +12,11 @@ const client = new Client({
 // connects to the database
 client
   .connect()
-  .then(() => console.log('Connected to PostgreSQL'))
-  .catch((err) => console.error('Connection failed:', err));
+  .then(() => {
+    console.log('Connected to PostgreSQL');
+  })
+  .catch((err: unknown) => {
+    console.error('Connection failed:', err);
+  });
 
 export default client;

@@ -1,26 +1,32 @@
+import type { ReactElement } from 'react';
 import { type AllergenFilterProps } from '../types/Types';
 
 const AllergenFilter = ({
   allergensList,
   selectedAllergens,
   onAllergenChange,
-}: AllergenFilterProps) => {
+}: AllergenFilterProps): ReactElement => {
   return (
     <div>
-      <h3>Filter allergens:</h3>
+      <h2 className="fw-bold text-muted fs-5 mb-2">Filter allergens:</h2>
       {allergensList.length === 0 ? (
-        <p>No allergens found</p>
+        <p className="fw-bold text-muted mb-2">No allergens found</p>
       ) : (
-        <div>
+        <div className="d-flex flex-wrap gap-3">
           {allergensList.map((allergen) => (
-            <label key={allergen}>
-              <input
-                type="checkbox"
-                checked={selectedAllergens.includes(allergen)}
-                onChange={() => onAllergenChange(allergen)}
-              />
-              {allergen}
-            </label>
+            <div key={allergen} className="form-check">
+              <label>
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  checked={selectedAllergens.includes(allergen)}
+                  onChange={() => {
+                    onAllergenChange(allergen);
+                  }}
+                />
+                {allergen}
+              </label>
+            </div>
           ))}
         </div>
       )}

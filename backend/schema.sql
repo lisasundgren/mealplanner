@@ -1,7 +1,9 @@
--- Gör klart diagram först
-DROP TABLE IF EXISTS mealplanner_recipes CASCADE;
+-- Jag har lämnat kvar mealplanner tabellerna och datan ifall jag får feeling och vill fortsätta med detta i framtiden
+
+
+-- DROP TABLE IF EXISTS mealplanner_recipes CASCADE;
 DROP TABLE IF EXISTS recipes_ingredients CASCADE;
-DROP TABLE IF EXISTS mealplanner CASCADE;
+-- DROP TABLE IF EXISTS mealplanner CASCADE;
 DROP TABLE IF EXISTS ingredients CASCADE;
 DROP TABLE IF EXISTS recipes CASCADE;
 -- DROP TABLE IF EXISTS users CASCADE;
@@ -19,7 +21,7 @@ CREATE TABLE recipes (
     description TEXT,
     instructions TEXT NOT NULL,
     cooking_time integer,
-    portions INTEGER
+    portions INTEGER NOT NULL
 );
 
 CREATE TABLE ingredients (
@@ -29,12 +31,12 @@ CREATE TABLE ingredients (
     allergen TEXT
 );
 
-CREATE TABLE mealplanner (
-    id SERIAL PRIMARY KEY,
-    -- user_id INTEGER NOT NULL,
-    date DATE
-    -- FOREIGN KEY (user_id) REFERENCES users(id)
-);
+-- CREATE TABLE mealplanner (
+--     id SERIAL PRIMARY KEY,
+--     -- user_id INTEGER NOT NULL,
+--     date DATE
+--     -- FOREIGN KEY (user_id) REFERENCES users(id)
+-- );
 
 CREATE TABLE recipes_ingredients (
     id SERIAL PRIMARY KEY,
@@ -46,14 +48,14 @@ CREATE TABLE recipes_ingredients (
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
 );
 
-CREATE TABLE mealplanner_recipes (
-    id SERIAL PRIMARY KEY,
-    mealplanner_id INTEGER NOT NULL,
-    recipe_id INTEGER NOT NULL,
-    meal_type TEXT,
-    FOREIGN KEY (mealplanner_id) REFERENCES mealplanner(id),
-    FOREIGN KEY (recipe_id) REFERENCES recipes(id)
-);
+-- CREATE TABLE mealplanner_recipes (
+--     id SERIAL PRIMARY KEY,
+--     mealplanner_id INTEGER NOT NULL,
+--     recipe_id INTEGER NOT NULL,
+--     meal_type TEXT,
+--     FOREIGN KEY (mealplanner_id) REFERENCES mealplanner(id),
+--     FOREIGN KEY (recipe_id) REFERENCES recipes(id)
+-- );
 
 INSERT INTO recipes (name, description, instructions, cooking_time, portions) VALUES
 (
@@ -94,10 +96,10 @@ INSERT INTO ingredients (name, category, allergen) VALUES
 ('Plain yogurt', 'Dairy', 'Lactose');     -- ID 13
 
 
-INSERT INTO mealplanner (date) VALUES
-('2026-05-25'), -- Generates ID 1 (Monday)
-('2026-05-26'), -- Generates ID 2 (Tuesday)
-('2026-05-27'); -- Generates ID 3 (Wednesday)
+-- INSERT INTO mealplanner (date) VALUES
+-- ('2026-05-25'), -- Generates ID 1 (Monday)
+-- ('2026-05-26'), -- Generates ID 2 (Tuesday)
+-- ('2026-05-27'); -- Generates ID 3 (Wednesday)
 
 INSERT INTO recipes_ingredients (recipe_id, ingredient_id, amount, unit) VALUES
 -- Simple Tomato Pasta (Recipe 1)
@@ -119,16 +121,16 @@ INSERT INTO recipes_ingredients (recipe_id, ingredient_id, amount, unit) VALUES
 (3, 12, 1, 'tbsp'),  -- Butter
 (3, 13, 1, 'dl');    -- Plain yogurt
 
-INSERT INTO mealplanner_recipes (mealplanner_id, recipe_id, meal_type) VALUES
--- Monday (mealplanner_id = 1)
-(1, 1, 'Dinner'), -- Tomato Pasta for Dinner
+-- INSERT INTO mealplanner_recipes (mealplanner_id, recipe_id, meal_type) VALUES
+-- -- Monday (mealplanner_id = 1)
+-- (1, 1, 'Dinner'), -- Tomato Pasta for Dinner
 
--- Tuesday (mealplanner_id = 2)
-(2, 1, 'Lunch'),  -- Tomato Pasta for Lunch
-(2, 2, 'Dinner'), -- Quesadillas for Dinner
+-- -- Tuesday (mealplanner_id = 2)
+-- (2, 1, 'Lunch'),  -- Tomato Pasta for Lunch
+-- (2, 2, 'Dinner'), -- Quesadillas for Dinner
 
--- Wednesday (mealplanner_id = 3)
-(3, 3, 'Dinner'); -- Baked Salmon for Dinner
+-- -- Wednesday (mealplanner_id = 3)
+-- (3, 3, 'Dinner'); -- Baked Salmon for Dinner
 
 SELECT * FROM recipes
 -- on recipes.id is the recipe we're looking at. = recipes_ing. recipe_id, here we look for the rows where recipe_id match recipes.id. the . between the table names means put these rows together.
