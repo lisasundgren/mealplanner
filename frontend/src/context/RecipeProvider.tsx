@@ -12,8 +12,8 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }): Rea
     async function fetchData(): Promise<void> {
       try {
         const [recipesResponse, allergensResponse] = await Promise.all([
-          fetch('http://localhost:3000/recipes'),
-          fetch('http://localhost:3000/allergens'),
+          fetch('/recipes'),
+          fetch('/allergens'),
         ]);
         if (!recipesResponse.ok || !allergensResponse.ok) {
           throw new Error('Could not load the data.');
@@ -95,7 +95,7 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }): Rea
   const updateRecipe = async (updatedRecipe: Recipe): Promise<void> => {
     try {
       // We send the data to our backend
-      const response = await fetch(`http://localhost:3000/recipes/${updatedRecipe.id.toString()}`, {
+      const response = await fetch(`/recipes/${updatedRecipe.id.toString()}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }): Rea
 
   const addRecipe = async (newRecipeData: Omit<Recipe, 'id'>): Promise<void> => {
     try {
-      const response = await fetch('http://localhost:3000/recipes', {
+      const response = await fetch('/recipes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }): Rea
 
   const deleteRecipe = async (id: number): Promise<void> => {
     try {
-      const response = await fetch(`http://localhost:3000/recipes/${id.toString()}`, {
+      const response = await fetch(`/recipes/${id.toString()}`, {
         method: 'DELETE',
       });
 

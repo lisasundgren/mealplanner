@@ -1,3 +1,4 @@
+import path from 'path';
 import express, { type Request, type Response } from 'express';
 import cors from 'cors'; //
 import database from './database.js';
@@ -10,10 +11,13 @@ import {
 } from './Types.js';
 
 const app = express();
-const PORT = 3000;
+// allows Render to decide which port it should be run by, by using an environmental variable.
+const PORT = process.env.PORT ?? 3000;
 
 app.use(cors());
 app.use(express.json());
+// Serves the frontend production-files from dist-folder
+app.use(express.static(path.join(path.resolve(), 'dist')));
 
 // unknown means "I don't really know what this is yet, so before we use it TS force me to check and validate what it is before I use it."
 // Promise<Respponse> forces us to send a response,we have to write 'return' on every possible ending

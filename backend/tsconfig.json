@@ -2,25 +2,22 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
+    "outDir": "./dist-backend",
+    "rootDir": "./src",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
-    "moduleResolution": "nodenext", // nytt
+    "moduleResolution": "nodenext",
     // "target": "esnext",
-    "target": "es2022", //nytt
-    "lib": ["es2022"], //nytt
+    "target": "es2022",
+    "lib": ["es2022"],
     "types": ["node"],
     // "types": [],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
-
-    "outDir": "./dist", //nytt
-    "rootDir": "./src", //nytt
 
     // Other Outputs
     "sourceMap": true,
