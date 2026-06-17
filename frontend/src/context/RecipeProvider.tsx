@@ -23,8 +23,12 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }): Rea
         const recipesData = (await recipesResponse.json()) as Recipe[];
         const allergensData = (await allergensResponse.json()) as string[];
 
+        const cleanAllergens = Array.from(
+          new Set(allergensData.map((allergen) => allergen.toLowerCase())),
+        );
+
         setRecipes(recipesData);
-        setAllergens(allergensData);
+        setAllergens(cleanAllergens);
       } catch (error) {
         console.error('Error while catching:', error);
       } finally {
